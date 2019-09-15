@@ -57,8 +57,11 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for=selCampus>Campus</label>
-                    <select class="form-control" id="selCampus">
-                        <!--RENDER CAMPI LIST-->
+                    <select class="form-control" id="selCampus" onchange="populate('selCampus', 'selCurso')">
+                        <option>Selecione o campus</option>
+                        <option>Benfica</option>
+                        <option>Pici</option>
+                        <option>Porangabussu</option>
                     </select>
                 </div>
                 <div class="form-group">
