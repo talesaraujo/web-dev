@@ -1,9 +1,21 @@
 /*
-    Helper function to render options inside selection forms
+    Helper functions to render options inside selection forms
 */
-var render = function(template, node) {
+function render(template, node) {
     node.innerHTML = template;
 }
+
+function createOptionTemplate(courseList) {
+    var template = "";
+
+    for (var i = 0; i < courseList.length; i++) {
+        template += `<option>${courseList[i]}</option>\n`;
+    }
+
+    return template;
+}
+
+var campusUFC = ['Benfica', 'Pici', 'Porangabussu', 'Campus de Quixadá', 'Campus de Sobral']
 
 var cursosBenfica = ['Biblioteconomia',
                      'Ciências Sociais',
@@ -74,11 +86,4 @@ var cursosPici = ['Biotecnologia',
 
 
 
-var piciTemplate =                
-                   
-
-
-
-
-
-render(campusTemplate, document.querySelector('#selCampus'));
+render(createOptionTemplate(campusUFC), document.querySelector('#selCampus'));
