@@ -17,31 +17,31 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="entradaMatricula">Matrícula</label>
-                    <input type="text" class="form-control" id="inputMatricula" placeholder="Adicione a matrícula do aluno">
+                    <input type="number" class="form-control" id="inputMatricula" placeholder="Adicione a matrícula do aluno" name="matricula" required>
                 </div>
                 <div class="form-group col-md-8">
                     <label for="entradaNome">Nome</label>
-                    <input type="text" class="form-control" id="inputNome" placeholder="Adicione o nome do aluno">
+                    <input type="text" class="form-control" id="inputNome" placeholder="Adicione o nome do aluno" name="nome" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="entradaDataNasc">Data de Nascimento</label>
-                    <input type="date" class="form-control" id="inputDataNasc" placeholder="dd/mm/aaaa">
+                    <input type="date" class="form-control" id="inputDataNasc" placeholder="dd/mm/aaaa" name="data" required>
                 </div>
                 <div class="form-group col-md-8">
                     <label for="entradaEmail">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" placeholder="Adicione o email do aluno">
+                    <input type="email" class="form-control" id="inputEmail" placeholder="Adicione o email do aluno" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" name="email" required>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-1">
                     <label for="entradaDDD">DDD</label>
-                    <input type="text" class="form-control" id="inputDDD" placeholder="DDD">
+                    <input type="number" class="form-control" id="inputDDD" placeholder="DDD" name="DDD" required>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="entradaTel">Telefone</label>
-                    <input type="text" class="form-control" id="inputTel" placeholder="Adicione o telefone do aluno">
+                    <input type="tel" class="form-control" id="inputTel" placeholder="99999-9999" pattern="[0-9]{5}-[0-9]{4}" name="telefone" required>
                 </div>
                 <div class="form-group">
                     <label for="selOp">Operadora</label>
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group">
+                <div class="form-group col-md-4">
                     <label for=selCampus>Campus</label>
                     <select class="form-control" id="selCampus" onchange="populate('selCampus', 'selCurso')">
                         <option>Selecione o campus</option>
@@ -64,18 +64,55 @@
                         <option>Porangabussu</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group col-md-4">
                     <label for=selCurso>Curso</label>
                     <select class="form-control" id="selCurso">
+                        <option>Selecione o curso</option>
                         <!--RENDER COURSE LIST-->
                     </select>
                 </div>
             </div>
 
-            
+            <div class="form-row">
+                <button type="reset" class="btn btn-secondary">Limpar</button>
+                
+                <button type="submit" class="btn btn-info">Inserir</button>
+            </div>
         </form>
     </div>
 
+
+    <div class="container">
+        <table class="table">
+                <thead>
+                    <tr>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Ações</th>
+                    
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    
+                    </tr>
+                    <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    
+                    </tr>
+                    <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    </tr>
+                </tbody>
+                </table>
+    </div>
     
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
