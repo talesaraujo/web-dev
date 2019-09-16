@@ -2,6 +2,48 @@ body {
     font-family: "Roboto";
 }
 
+#app-name {
+    padding-left: 9%;
+    padding-top: 1%;
+}
+
+
+#form-name {
+    /*
+    background-color: #2E7BB3;
+    color: #FFF
+    */
+    padding-left: 0;
+}
+
+#lista-alunos {
+    border-top: 3%;
+}
+*/
+
 #formulario {
     padding-top: 1%;
+    margin-bottom: 2%;
+    /*
+    border-color: #2E7BB3;
+    border-style: solid;
+
+    */
+    
+}
+
+#clear, #submit-data {
+    margin: 3px;
+}
+
+#buttons {
+    float: right;
+}
+
+#matr-col {
+    width: 12%;
+}
+
+#nome-col {
+    width: 70%;
 }

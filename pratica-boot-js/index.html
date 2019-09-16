@@ -10,9 +10,10 @@
     <title>Controle de Alunos</title>
 </head>
 <body>
+    <h2 id="app-name">Sistema de Controle de Alunos</h2>
+    
     <div class="container" id="formulario">
-        <h1>Sistema de Controle de Alunos</h1>
-
+        <h5 id="form-name" class="container">Formulário de alunos</h5>
         <form id="formulario-alunos">
             <div class="form-row">
                 <div class="form-group col-md-4">
@@ -41,7 +42,7 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label for="entradaTel">Telefone</label>
-                    <input type="tel" class="form-control" id="inputTel" placeholder="99999-9999" pattern="[0-9]{5}-[0-9]{4}" name="telefone" required>
+                    <input type="tel" class="form-control" id="inputTel" placeholder="XXXXX-XXXX" pattern="[0-9]{5}-[0-9]{4}" name="telefone" required>
                 </div>
                 <div class="form-group">
                     <label for="selOp">Operadora</label>
@@ -73,42 +74,39 @@
                 </div>
             </div>
 
-            <div class="form-row">
-                <button type="reset" class="btn btn-secondary">Limpar</button>
-                
-                <button type="submit" class="btn btn-info">Inserir</button>
+            <div class="form-row" id="buttons">
+                <button type="reset" class="btn btn-secondary" id="clear">Limpar</button>
+                <button type="submit" class="btn btn-info" id="submit-data">Inserir</button>
             </div>
         </form>
     </div>
-
-
-    <div class="container">
-        <table class="table">
-                <thead>
+    <br>
+    <br>
+    <br>
+    <div class="container" id="lista-alunos">
+        <table class="table" id="tabela-alunos">
+                <thead class="thead-light">
                     <tr>
-                    <th scope="col">Matrícula</th>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Ações</th>
-                    
+                        <th scope="col" id="matr-col">Matrícula</th>
+                        <th scope="col" id="nome-col">Nome</th>
+                        <th scope="col">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    
+                        <th scope="row">1</th>
+                        <td>Aluno 1</td>
+                        <td><button type="submit" class="btn btn-danger">Remover</button></td>
                     </tr>
                     <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    
+                        <th scope="row">2</th>
+                        <td>Aluno 2</td>
+                        <td><button type="submit" class="btn btn-danger">Remover</button></td>
                     </tr>
                     <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
+                        <th scope="row">3</th>
+                        <td>Aluno 3</td>
+                        <td><button type="submit" class="btn btn-danger">Remover</button></td>
                     </tr>
                 </tbody>
                 </table>
