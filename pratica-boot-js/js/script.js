@@ -117,12 +117,16 @@ form.onsubmit = function(event) {
         //'curso': form.curso.value
     })
 
+    templateRow = ``;
+
     for (var i = 0; i < alunos.length; i++) {
-        document.getElementById("corpo-lista").innerHTML = `<tr>
-                                                            <th scope="row">${alunos[i].matricula}</th>
-                                                            <td>${alunos[i].nome}</td>
-                                                            <td><button type="submit" class="btn btn-danger">Remover</button></td>
-                                                            </tr>`
+        templateRow += `<tr>
+                        <th scope="row">${alunos[i].matricula}</th>
+                        <td>${alunos[i].nome}</td>
+                        <td><button type="submit" class="btn btn-danger">Remover</button></td>
+                        </tr>\n`
+
+        document.getElementById("corpo-lista").innerHTML = templateRow;
     }
 }
 
