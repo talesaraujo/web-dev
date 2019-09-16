@@ -14,7 +14,7 @@
     
     <div class="container" id="formulario">
         <h5 id="form-name" class="container">Formulário de alunos</h5>
-        <form id="formulario-alunos">
+        <form id="formulario-alunos" method="POST">
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="entradaMatricula">Matrícula</label>
@@ -28,7 +28,7 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="entradaDataNasc">Data de Nascimento</label>
-                    <input type="date" class="form-control" id="inputDataNasc" placeholder="dd/mm/aaaa" name="data" required>
+                    <input type="date" class="form-control" id="inputDataNasc" placeholder="dd/mm/aaaa" name="datanasc" required>
                 </div>
                 <div class="form-group col-md-8">
                     <label for="entradaEmail">Email</label>
@@ -36,9 +36,9 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-md-1">
+                <div class="form-group col-md-3">
                     <label for="entradaDDD">DDD</label>
-                    <input type="number" class="form-control" id="inputDDD" placeholder="DDD" name="DDD" required>
+                    <input type="number" class="form-control" id="inputDDD" placeholder="DDD" name="ddd" required>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="entradaTel">Telefone</label>
@@ -46,11 +46,11 @@
                 </div>
                 <div class="form-group">
                     <label for="selOp">Operadora</label>
-                    <select class="form-control" id="selOp">
-                        <option>Oi</option>
-                        <option>TIM</option>
-                        <option>Vivo</option>
-                        <option>Claro</option>
+                    <select class="form-control" id="selOp" name='operadora'>
+                        <option name='oi'>Oi</option>
+                        <option name='tim'>TIM</option>
+                        <option name='vivo'>Vivo</option>
+                        <option name='claro'>Claro</option>
                         <option>Outra</option>
                     </select>
                 </div>
@@ -58,16 +58,16 @@
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for=selCampus>Campus</label>
-                    <select class="form-control" id="selCampus" onchange="populate('selCampus', 'selCurso')">
+                    <select class="form-control" id="selCampus" name="campus" onchange="populate('selCampus', 'selCurso')">
                         <option>Selecione o campus</option>
-                        <option>Benfica</option>
-                        <option>Pici</option>
-                        <option>Porangabussu</option>
+                        <option name='benfica'>Benfica</option>
+                        <option name='pici'>Pici</option>
+                        <option name='porangabussu'>Porangabussu</option>
                     </select>
                 </div>
                 <div class="form-group col-md-4">
                     <label for=selCurso>Curso</label>
-                    <select class="form-control" id="selCurso">
+                    <select class="form-control" name="curso" id="selCurso">
                         <option>Selecione o curso</option>
                         <!--RENDER COURSE LIST-->
                     </select>
@@ -84,7 +84,7 @@
     <br>
     <br>
     <div class="container" id="lista-alunos">
-        <table class="table" id="tabela-alunos">
+        <table class="table table-bordered" id="tabela-alunos">
                 <thead class="thead-light">
                     <tr>
                         <th scope="col" id="matr-col">Matrícula</th>
@@ -92,10 +92,11 @@
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="corpo-lista">
+                    <!--
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Aluno 1</td>
+                        <th scope="row">374953</th>
+                        <td>Tales Araujo dos Santos</td>
                         <td><button type="submit" class="btn btn-danger">Remover</button></td>
                     </tr>
                     <tr>
@@ -108,6 +109,7 @@
                         <td>Aluno 3</td>
                         <td><button type="submit" class="btn btn-danger">Remover</button></td>
                     </tr>
+                    -->
                 </tbody>
                 </table>
     </div>

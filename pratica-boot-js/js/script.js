@@ -1,4 +1,3 @@
-
 var CAMPI = {
     "Benfica": ['Biblioteconomia',
                 'Ciências Sociais',
@@ -96,3 +95,41 @@ function populate(select1, select2) {
         s2.options.add(newOption);
     }
 }
+
+
+var alunos = []
+
+
+var form = document.getElementById('formulario-alunos');
+
+form.onsubmit = function(event) {
+    event.preventDefault();
+
+    alunos.push({
+        'matricula': form.matricula.value,
+        'nome': form.nome.value,
+        'datanasc': form.datanasc.value,
+        'email': form.email.value,
+        'ddd': form.ddd.value,
+        'telefone': form.telefone.value,
+        'operadora': form.operadora.value,
+        'campus': form.campus.value
+        //'curso': form.curso.value
+    })
+
+    for (var i = 0; i < alunos.length; i++) {
+        document.getElementById("corpo-lista").innerHTML = `<tr>
+                                                            <th scope="row">${alunos[i].matricula}</th>
+                                                            <td>${alunos[i].nome}</td>
+                                                            <td><button type="submit" class="btn btn-danger">Remover</button></td>
+                                                            </tr>`
+    }
+}
+
+
+
+
+
+
+
+
