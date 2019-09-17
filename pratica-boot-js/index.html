@@ -10,6 +10,47 @@
     <title>Controle de Alunos</title>
 </head>
 <body>
+    <div class="container" id="about-modal">
+        <!-- Button trigger modal -->
+        <button id="about-button" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal">?</button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Autor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Tales Araujo</h6>
+                    
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <img src="img/char_talim.png" class="rounded-circle" alt="char_talim" width="100" height="100">
+                        </div>
+                        <div class="col-sm-8" id="about-description">
+                            <p>
+                                Hi there! I'm Tales Araujo, a Computer-Engineering undergraduate student, currently holding a bachelor degree at 
+                                Federal University of Ceara (UFC), and enthusiast of topics evolving data, Machine Learning and Deep Learning as well.
+                                I am passionate about discovering things throughout the world, gathering information for what I think that is relevant
+                                in some way in order to bring meaningful outcomes to the world around me.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <a href="https://github.com/talesaraujo">My GitHub profile</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
     <h2 id="app-name">Sistema de Controle de Alunos</h2>
     
     <div class="container" id="formulario">
@@ -75,7 +116,7 @@
             </div>
 
             <div class="form-row" id="buttons">
-                <button type="reset" class="btn btn-secondary" id="clear">Limpar</button>
+                <button type="reset" class="btn btn-light" id="clear">Limpar</button>
                 <button type="submit" class="btn btn-info" id="submit-data">Inserir</button>
             </div>
         </form>
@@ -103,6 +144,7 @@
     <script src="js/jquery-3.3.1.slim.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    
     <script src="js/script.js"></script>
     
 </body>
