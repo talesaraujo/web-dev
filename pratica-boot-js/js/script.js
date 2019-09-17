@@ -96,27 +96,67 @@ function populate(select1, select2) {
     }
 }
 
+/*
+    Sorting functions (sort by name key)
+*/
+function sortByName(objectArray, startIndex, finishIndex) {
+	var q;
 
-var alunos = []
+	if (startIndex < finishIndex) {
+		q = Math.floor((startIndex + finishIndex) / 2);
+		
+		sortByName(objectArray, startIndex, q);
+		sortByName(objectArray, q+1, finishIndex);
+		merge(objectArray, startIndex, q, finishIndex);
+	}
+}
+				
+function merge(A, p, q, r) {
+	var n1 = q - p + 1;
+	var n2 = r - q;
+	var L = [],
+		R = [];
 
+	for (var i = 0; i < n1; i++) {
+		L.push(A[p + i]);
+	}
+	for (var j = 0; j < n2; j++) {
+		R.push(A[q + j + 1]);
+	}
+	
+	j = 0;
+	i = j;
+	var k = p;
 
+	while ((i != n1) && (j != n2)) {
+		if (L[i].nome <= R[j].nome) {
+			A[k] = L[i];
+			i++;
+		}
+		else {
+			A[k] = R[j];
+			j++;
+		}
+		k++;
+	}
+	if (i == n1) {
+		for (var m = j; m < n2; m++) {
+			A[k] = R[m];
+			k++;
+		}
+	}
+	if (j == n2) {
+		for (var m = i; m < n1; m++) {
+			A[k] = L[m];
+			k++;
+		}
+	}
+}
+
+var alunos = [];
 var form = document.getElementById('formulario-alunos');
 
-form.onsubmit = function(event) {
-    event.preventDefault();
-
-    alunos.push({
-        'matricula': form.matricula.value,
-        'nome': form.nome.value,
-        'datanasc': form.datanasc.value,
-        'email': form.email.value,
-        'ddd': form.ddd.value,
-        'telefone': form.telefone.value,
-        'operadora': form.operadora.value,
-        'campus': form.campus.value
-        //'curso': form.curso.value
-    })
-
+function displayList() {
     templateRow = ``;
 
     for (var i = 0; i < alunos.length; i++) {
@@ -131,9 +171,22 @@ form.onsubmit = function(event) {
 }
 
 
+form.onsubmit = function(event) {
+    event.preventDefault();
 
+    alunos.push({
+        'matricula': form.matricula.value,
+        'nome': form.nome.value,
+        'datanasc': form.datanasc.value,
+        'email': form.email.value,
+        'ddd': form.ddd.value,
+        'telefone': form.telefone.value,
+        'operadora': form.operadora.value,
+        'campus': form.campus.value
+        //'curso': form.curso.value
+    });
 
+    sortByName(alunos, 0, alunos.length - 1);
 
-
-
-
+    displayList();
+}
