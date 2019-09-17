@@ -159,14 +159,20 @@ var form = document.getElementById('formulario-alunos');
 function displayList() {
     templateRow = ``;
 
-    for (var i = 0; i < alunos.length; i++) {
-        templateRow += `<tr>
-                        <th scope="row">${alunos[i].matricula}</th>
-                        <td>${alunos[i].nome}</td>
-                        <td><button type="submit" class="btn btn-danger">Remover</button></td>
-                        </tr>\n`
+    if (alunos.length > 0) {
+        for (var i = 0; i < alunos.length; i++) {
+            templateRow += `<tr>
+                            <td>${alunos[i].matricula}</td>
+                            <td>${alunos[i].nome}</td>
+                            <td><button type="button" class="btn btn-danger" onclick="remove(${alunos[i].matricula})">Remover</button></td>
+                            </tr>\n`
 
-        document.getElementById("corpo-lista").innerHTML = templateRow;
+            document.getElementById("corpo-lista").innerHTML = templateRow;
+        }
+    }
+    else {
+        //Display nothing
+        document.getElementById("corpo-lista").innerHTML = `<tr></tr>`
     }
 }
 
@@ -188,5 +194,21 @@ form.onsubmit = function(event) {
 
     sortByName(alunos, 0, alunos.length - 1);
 
+    displayList();
+}
+
+
+function remove(num_matricula) {
+    // Delete register from array
+    for (var i = 0; i < alunos.length; i++) {
+        if (alunos[i].matricula == num_matricula) { 
+            delete alunos[i];
+        }
+    }
+    // Remove empty spaces on array
+    alunos = alunos.filter(function(element) {
+        return element != null;
+    });
+    //Display updated list
     displayList();
 }
