@@ -2,6 +2,11 @@ body {
     font-family: "Roboto";
 }
 
+#about-button, #about-description {
+    float: right;
+    margin-top: 0.5%;
+}
+
 #app-name {
     padding-left: 9%;
     padding-top: 1%;
