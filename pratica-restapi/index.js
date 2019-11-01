@@ -8,6 +8,16 @@ app.use(express.json());
 
 
 var alunos = [];
+var campi = [
+    {
+        "campus": "Pici",
+        "cursos": ["Computação", "Física", "Estatística"]
+    },
+    {
+        "campus": "Benfica",
+        "cursos": ["Pedagogia", "Economia", "História"]
+    }
+];
 
 
 /**
@@ -112,8 +122,19 @@ app.delete("/api/alunos/:matricula", (req, res) => {
 });
 
 
+/**
+ * Retorna a lista de campi armazenadas no servidor. Cada campus deve guardar as
+ * informações dos cursos que são  oferecidos. 
+ */
+app.get("/api/campi", (req, res) => {
+    res.send(campi);
+});
 
-const PORT = process.env.PORT || 5000;
+
+
+
+
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
     console.log(`Express server listening on port ${PORT}`);
