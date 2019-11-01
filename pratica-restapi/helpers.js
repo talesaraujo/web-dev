@@ -5,7 +5,7 @@ const Joi = require("joi");
  * retorna seu índice, caso contrário, 
  * retorna índice -1 (não existente).
  */
-function exists(matr, alunos) {
+function buscaAluno(matr, alunos) {
     for (var i = 0; i < alunos.length; i++) {
         if (alunos[i].matricula == matr) {
             return i;
@@ -15,11 +15,11 @@ function exists(matr, alunos) {
 }
 
 /**
- * Retorna o nome do aluno com a dada matrícula se exta existir,
+ * Retorna o nome do aluno com a dada matrícula se esta existir,
  * caso contrário, retorna nulo.
  */
-function findAluno(matr, alunos) {
-    const index = exists(matr, alunos);
+function obterAluno(matr, alunos) {
+    const index = buscaAluno(matr, alunos);
 
     // Caso o aluno não exista
     if (index < 0) {
@@ -39,5 +39,19 @@ function validarAluno(aluno) {
     return Joi.validate(aluno, schema);
 }
 
+/**
+ * Checa se o campus com código fornecido existe. Caso positivo,
+ * retorna seu índice, caso contrário, 
+ * retorna índice -1 (não existente).
+ */
+function buscaCampus(cod, campi) {
+    for (var i = 0; i < campi.length; i++) {
+        if (campi[i].codigo == cod) {
+            return i;
+        }
+    }
+    return -1;
+}
 
-module.exports = {exists, findAluno, validarAluno};
+
+module.exports = {buscaAluno, obterAluno, validarAluno, buscaCampus};

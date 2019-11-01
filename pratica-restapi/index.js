@@ -10,10 +10,12 @@ app.use(express.json());
 var alunos = [];
 var campi = [
     {
+        "codigo": 0,
         "campus": "Pici",
         "cursos": ["Computação", "Física", "Estatística"]
     },
     {
+        "codigo": 1,
         "campus": "Benfica",
         "cursos": ["Pedagogia", "Economia", "História"]
     }
@@ -65,7 +67,7 @@ app.post("/api/alunos", (req, res) => {
     }
 
     // Se o aluno já existir
-    if (helper.exists(aluno.matricula, alunos) >= 0) {
+    if (helper.buscaAluno(aluno.matricula, alunos) >= 0) {
         return res.status(409).send("Erro: Já existe um aluno com a matrícula fornecida!");
     }
 
@@ -73,6 +75,7 @@ app.post("/api/alunos", (req, res) => {
     alunos.push(aluno);
     return res.send(aluno);
 });
+
 
 /**
  * Altera dados de um aluno com a matrícula passada na chamada do endpoint 
@@ -88,7 +91,7 @@ app.put("/api/alunos/:matricula", (req, res) => {
     }
 
     const matr = req.params.matricula;
-    const indice = helper.exists(matr, alunos);
+    const indice = helper.buscaAluno(matr, alunos);
 
     // Se o aluno não existir
     if (indice < 0) {
@@ -109,7 +112,7 @@ app.put("/api/alunos/:matricula", (req, res) => {
  */
 app.delete("/api/alunos/:matricula", (req, res) => {
     const matr = req.params.matricula;
-    const index = helper.exists(matr, alunos);
+    const index = helper.buscaAluno(matr, alunos);
 
     // Caso o aluno não exista
     if (index < 0) {
@@ -130,6 +133,22 @@ app.get("/api/campi", (req, res) => {
     res.send(campi);
 });
 
+
+/**
+* Retorna os dados do campus cujo código é passado na chamada, bem como seus
+* cursos. Retorna os códigos de erros correspondentes caso não exista campus
+* com a código repassado ou erros internos do servidor
+ */
+app.get("/api/campi/:codigo", (req, res) => {
+    // Pendente: realizar validação
+    const cod = req.params.codigo;
+    const index = helper.buscaCampus(cod, campi);
+
+    if (index < 0) {
+        return res.status(404).send("Erro: Campus não encontrado!");
+    }
+    return res.send(campi[index]);
+});
 
 
 
