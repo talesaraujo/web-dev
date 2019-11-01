@@ -86,11 +86,30 @@ app.put("/api/alunos/:matricula", (req, res) => {
     }
 
     // Atualiza os dados do aluno e o retorna com dados atualizados.
-    alunos[indice] = req.body;    
+    alunos[indice].nome = req.body.nome;    
 
     return res.send(alunos[indice]);
 });
 
+
+/**
+ * Remove o aluno com a matrícula passada na chamada do endpoint e e retorna os
+ * dados do aluno removido. Retorna os códigos de erros correspondentes caso
+ * não exista aluno com a matrícula selecionada ou erros internos do servidor
+ */
+app.delete("/api/alunos/:matricula", (req, res) => {
+    const matr = req.params.matricula;
+    const index = helper.exists(matr, alunos);
+
+    // Caso o aluno não exista
+    if (index < 0) {
+        return res.status(404).send("Erro: Aluno não encontrado!");
+    }
+
+    // Exclui da lista e o retorna
+    aluno = alunos.splice(index, 1);
+    return res.send(aluno);
+});
 
 
 
