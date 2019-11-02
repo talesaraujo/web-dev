@@ -8,18 +8,7 @@ app.use(express.json());
 
 
 var alunos = [];
-var campi = [
-    {
-        "codigo": 0,
-        "campus": "Pici",
-        "cursos": ["Computação", "Física", "Estatística"]
-    },
-    {
-        "codigo": 1,
-        "campus": "Benfica",
-        "cursos": ["Pedagogia", "Economia", "História"]
-    }
-];
+var campi = [];
 
 
 /**
@@ -38,7 +27,7 @@ app.get("/api/alunos", (req, res) => {
  */
 app.get("/api/alunos/:matricula", (req, res) => {
     const matr = req.params.matricula;
-    const aluno = helper.findAluno(matr, alunos);
+    const aluno = helper.obterAluno(matr, alunos);
 
     // Se o aluno não existir
     if (!aluno) {
@@ -120,8 +109,7 @@ app.delete("/api/alunos/:matricula", (req, res) => {
     }
 
     // Exclui da lista e o retorna
-    aluno = alunos.splice(index, 1);
-    return res.send(aluno);
+    return res.send(helper.removeAluno(index, alunos));
 });
 
 
@@ -151,11 +139,83 @@ app.get("/api/campi/:codigo", (req, res) => {
 });
 
 
+/***
+ * Inclui um campus no servidor e retorna os dados cadastrados. Retorna os 
+ * códigos de erros correspondentes caso já exista campus com o código 
+ * informado ou erros internos do servidor
+ */
+app.post("/api/campi/", (req, res) => {
+    //
+    campus = {
+        "codigo": req.body.codigo,
+        "campus": req.body.campus,
+        "cursos": req.body.cursos
+    }
+
+    const index = helper.buscaCampus(campus.codigo, campi);
+
+    // Se o curso já existir, retorna 409 (conflict)
+    if (index >= 0) {
+        res.status(409).send("Erro: Campus já existente!");
+    }
+
+    campi.push(campus);
+
+    return res.send(campus);
+});
+
+
+/**
+ * Altera dados de um campus com código passado na chamada do endpoint,
+ * e retorna o campus com os dados modificados. Retorna os códigos de erros
+ * correspondentes caso não exista campus com a código selecionado ou erros
+ * internos do servidor
+ */
+app.put("/api/campi/:codigo", (req, res) => {
+    const cod = req.params.codigo;
+    const index = helper.buscaCampus(cod, campi);
+
+    if (index < 0) {
+        return res.status(404).send("Erro: Campus não encontrado!");
+    }
+
+    campus = {
+        "codigo": req.body.codigo,
+        "campus": req.body.campus,
+        "cursos": req.body.cursos
+    }
+
+    campi[index] = campus;
+
+    return res.send(campus);
+});
+
+
+/**
+ * Remove o campus com a código passado na chamada do endpoint e retorna os
+ * dados do campus removido. Remove todos os alunos matriculados em cursos
+ * daquele campus. Retorna os códigos de erros correspondentes caso não exista
+ * campus com o código informado ou erros internos do servidor
+ */
+app.delete("/api/campi/:codigo", (req, res) => {
+    const cod = req.params.codigo;
+    const index = helper.buscaCampus(cod, campi);
+
+    // Caso o campus não exista
+    if (index < 0) {
+        return res.status(404).send("Erro: Campus não encontrado!");
+    }
+
+    // Se o campus existir, remove todos os alunos dos cursos e remove o campus.
+    return res.send(helper.removeCampus(index, campi, alunos));
+});
+
+
 
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Express server listening on port ${PORT}`);
+    console.log(`Server listening on port ${PORT}`);
 });
 
