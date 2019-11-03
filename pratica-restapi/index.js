@@ -27,14 +27,14 @@ app.get("/api/alunos", (req, res) => {
  */
 app.get("/api/alunos/:matricula", (req, res) => {
     const matr = req.params.matricula;
-    const aluno = helper.obterAluno(matr, alunos);
+    const index = helper.buscaAluno(matr, alunos);
 
     // Se o aluno não existir
-    if (!aluno) {
+    if (index < 0) {
         return res.status(404).send("Não existe aluno cadastrado com este número de matrícula.");
     }
     // Existindo, retorna o nome
-    return res.send(aluno);
+    return res.send(alunos[index].nome);
 });
 
 
@@ -44,10 +44,7 @@ app.get("/api/alunos/:matricula", (req, res) => {
  * matrícula selecionada ou erros internos do servidor.
  */
 app.post("/api/alunos", (req, res) => {
-    const aluno = {
-        matricula: req.body.matricula,
-        nome: req.body.nome
-    };
+    const aluno = req.body;
 
     // Aplica validação pelos campos do aluno necessários
     const { error } = helper.validarAluno(aluno);
@@ -73,8 +70,10 @@ app.post("/api/alunos", (req, res) => {
  * internos do servidor.
  */
 app.put("/api/alunos/:matricula", (req, res) => {
+    const aluno = req.body;
+
     // Valida corpo da requisição
-    const { error } = helper.validarAluno(req.body);
+    const { error } = helper.validarAluno(aluno);
     if (error) {
         return res.status(400).send(error.details[0].message);
     }
@@ -88,7 +87,10 @@ app.put("/api/alunos/:matricula", (req, res) => {
     }
 
     // Atualiza os dados do aluno e o retorna com dados atualizados.
-    alunos[indice].nome = req.body.nome;    
+    ['nome', 'datanasc', 'email', 'ddd', 'telefone', 'operadora', 'campus', 'curso']
+    .forEach((attr) => {
+        alunos[indice][attr] = aluno[attr];
+    });
 
     return res.send(alunos[indice]);
 });
@@ -128,7 +130,6 @@ app.get("/api/campi", (req, res) => {
 * com a código repassado ou erros internos do servidor
  */
 app.get("/api/campi/:codigo", (req, res) => {
-    // Pendente: realizar validação
     const cod = req.params.codigo;
     const index = helper.buscaCampus(cod, campi);
 
@@ -145,11 +146,11 @@ app.get("/api/campi/:codigo", (req, res) => {
  * informado ou erros internos do servidor
  */
 app.post("/api/campi/", (req, res) => {
-    //
-    campus = {
-        "codigo": req.body.codigo,
-        "campus": req.body.campus,
-        "cursos": req.body.cursos
+    campus = req.body;
+
+    const { error } = helper.validarCampus(campus);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
     }
 
     const index = helper.buscaCampus(campus.codigo, campi);
@@ -172,22 +173,29 @@ app.post("/api/campi/", (req, res) => {
  * internos do servidor
  */
 app.put("/api/campi/:codigo", (req, res) => {
-    const cod = req.params.codigo;
+    campus = req.body;
+
+    // Valida o novo campus de acordo com os requisitos
+    const { error } = helper.validarCampus(campus);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
+    const cod = req.params.codigo
     const index = helper.buscaCampus(cod, campi);
 
+    // Caso o campus fornecido não exista
     if (index < 0) {
         return res.status(404).send("Erro: Campus não encontrado!");
     }
 
-    campus = {
-        "codigo": req.body.codigo,
-        "campus": req.body.campus,
-        "cursos": req.body.cursos
-    }
+    // Atualiza o campus e retorna este novo campus com dados atualizados.
+    ['nome', 'cursos']
+    .forEach((attr) => {
+        campi[index][attr] = campus[attr];
+    });
 
-    campi[index] = campus;
-
-    return res.send(campus);
+    return res.send(campi[index]);
 });
 
 

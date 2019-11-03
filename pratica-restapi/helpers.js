@@ -34,7 +34,14 @@ function obterAluno(matr, alunos) {
 function validarAluno(aluno) {
     const schema = {
         matricula: Joi.number().required(),
-        nome: Joi.string().min(3).required()
+        nome: Joi.string().min(3).required(),
+        datanasc: Joi.string().min(10).max(10),
+        email: Joi.string(),
+        ddd: Joi.number().integer(),
+        telefone: Joi.string().min(10).max(10),
+        operadora: Joi.string(),
+        campus: Joi.string().required(),
+        curso: Joi.string().required()
     };
     return Joi.validate(aluno, schema);
 }
@@ -58,11 +65,28 @@ function buscaCampus(cod, campi) {
     return -1;
 }
 
+
+/**
+ * Valida o campus fornecido pelos campos adequados. 
+ */
+function validarCampus(campus) {
+    const schema = {
+        codigo: Joi.number().integer().required(),
+        campus: Joi.string().required(),
+        cursos: Joi.array().min(1).required()
+    };
+    return Joi.validate(campus, schema);
+}
+
+/**
+ * Define uma lista de campus, apaga todos os alunos associados com
+ * cada campus dessa lista, e por final apaga o campus.
+ * Retorna o campus removido.
+ */
 function removeCampus(index, campi, alunos) {
     // Reúne os cursos daquele campus em um array
     const cursos = campi[index].cursos;
     const alunos_marcados = [];
-
 
     // Para cada curso da lista do campus, verifique seus alunos e marque-os 
     for (var i = 0; i < cursos.length; i++) {
@@ -72,7 +96,7 @@ function removeCampus(index, campi, alunos) {
             }
         }
     }
-   
+       
     // Remove apenas os alunos da lista de marcados
     for (var i = 0; i < alunos_marcados.length; i++) {
         index = buscaAluno(alunos_marcados[i].matricula, alunos);
@@ -85,5 +109,5 @@ function removeCampus(index, campi, alunos) {
 
 
 module.exports = {
-    buscaAluno, obterAluno, validarAluno, removeAluno, buscaCampus, removeCampus
+    buscaAluno, obterAluno, validarAluno, removeAluno, buscaCampus, validarCampus, removeCampus
 };
