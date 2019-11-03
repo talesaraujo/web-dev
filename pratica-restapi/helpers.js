@@ -122,7 +122,25 @@ function removeCampus(index, campi, alunos) {
     return campi.splice(index, 1);
 }
 
+/**
+ * Verifica se um determinado aluno contém seu campus
+ * cadastrado no sistema
+ */
+function campusAusente(campus, campi) {
+    let listaCampi = obterCampi(campi); 
+    
+    // Verifica se o campus fornecido está contido na lista
+    var campusNotFound = true; var i = 0;
+    
+    while (campusNotFound && (i < listaCampi.length)) {
+        if (listaCampi[i] === campus) {
+            campusNotFound = false;
+        }
+        i++;
+    }
+    return campusNotFound
+}
 
 module.exports = {
-    buscaAluno, obterAluno, validarAluno, removeAluno, buscaCampus, validarCampus, obterCampi, removeCampus
+    buscaAluno, obterAluno, validarAluno, removeAluno, buscaCampus, validarCampus, obterCampi, removeCampus, campusAusente
 };

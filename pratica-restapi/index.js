@@ -20,10 +20,9 @@ app.get("/api/alunos", (req, res) => {
 
 
 /**
- * Retorna os dados do aluno cuja matrícula é passada
- * na chamada. Retorna os códigos de erro correspondentes
- * caso não exista aluno com matrícula selecionada ou erros
- * internos do servidor.
+ * Retorna os dados do aluno cuja matrícula é passada na chamada. 
+ * Retorna os códigos de erro correspondentes caso não exista aluno 
+ * com matrícula selecionada ou erros internos do servidor.
  */
 app.get("/api/alunos/:matricula", (req, res) => {
     const matr = req.params.matricula;
@@ -57,19 +56,8 @@ app.post("/api/alunos", (req, res) => {
         return res.status(409).send("Erro: Já existe um aluno com a matrícula fornecida!");
     }
 
-    const listaCampi = helper.obterCampi(campi); 
-    
-
-    // Verifica se o campus do aluno está contido na lista
-    var campusNotFound = true; var i = 0;
-    
-    while (campusNotFound && (i < listaCampi.length)) {
-        if (listaCampi[i] === aluno.campus) {
-            campusNotFound = false;
-        }
-        i++;
-    }
-    if (campusNotFound) {
+    // Se o campus do aluno não estiver na lista
+    if (helper.campusAusente(aluno.campus, campi)) {
         return res.status(412).send("Erro: O campus informado não consta no sistema");
     }
     
@@ -80,8 +68,8 @@ app.post("/api/alunos", (req, res) => {
 
 
 /**
- * Altera dados de um aluno com a matrícula passada na chamada do endpoint 
- * e retorna o aluno com os dados modificados. Retorna os códigos de erros
+ * Altera dados de um aluno com a matrícula passada na chamada do endpoint e 
+ * retorna o aluno com os dados modificados. Retorna os códigos de erros
  * correspondentes caso não exista aluno com a matrícula selecionada ou erros
  * internos do servidor.
  */
@@ -102,10 +90,8 @@ app.put("/api/alunos/:matricula", (req, res) => {
         return res.status(404).send("Erro: Aluno não encontrado!");
     }
 
-    listaCampi = helper.obterCampi(campi);
-    
-    // Verifica se o campus do aluno está contido na lista
-    if (!(aluno.campus in listaCampi)) {
+    // Se o campus do aluno não estiver na lista
+    if (helper.campusAusente(aluno.campus, campi)) {
         return res.status(412).send("Erro: O campus informado não consta no sistema");
     }
 
