@@ -57,6 +57,22 @@ app.post("/api/alunos", (req, res) => {
         return res.status(409).send("Erro: Já existe um aluno com a matrícula fornecida!");
     }
 
+    const listaCampi = helper.obterCampi(campi); 
+    
+
+    // Verifica se o campus do aluno está contido na lista
+    var campusNotFound = true; var i = 0;
+    
+    while (campusNotFound && (i < listaCampi.length)) {
+        if (listaCampi[i] === aluno.campus) {
+            campusNotFound = false;
+        }
+        i++;
+    }
+    if (campusNotFound) {
+        return res.status(412).send("Erro: O campus informado não consta no sistema");
+    }
+    
     // Caso contrário, insere na lista
     alunos.push(aluno);
     return res.send(aluno);
@@ -84,6 +100,13 @@ app.put("/api/alunos/:matricula", (req, res) => {
     // Se o aluno não existir
     if (indice < 0) {
         return res.status(404).send("Erro: Aluno não encontrado!");
+    }
+
+    listaCampi = helper.obterCampi(campi);
+    
+    // Verifica se o campus do aluno está contido na lista
+    if (!(aluno.campus in listaCampi)) {
+        return res.status(412).send("Erro: O campus informado não consta no sistema");
     }
 
     // Atualiza os dados do aluno e o retorna com dados atualizados.
@@ -157,7 +180,7 @@ app.post("/api/campi/", (req, res) => {
 
     // Se o curso já existir, retorna 409 (conflict)
     if (index >= 0) {
-        res.status(409).send("Erro: Campus já existente!");
+        return res.status(409).send("Erro: Campus já existente!");
     }
 
     campi.push(campus);
@@ -190,7 +213,7 @@ app.put("/api/campi/:codigo", (req, res) => {
     }
 
     // Atualiza o campus e retorna este novo campus com dados atualizados.
-    ['nome', 'cursos']
+    ['campus', 'cursos']
     .forEach((attr) => {
         campi[index][attr] = campus[attr];
     });

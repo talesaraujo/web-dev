@@ -78,6 +78,21 @@ function validarCampus(campus) {
     return Joi.validate(campus, schema);
 }
 
+
+/**
+ * Retorna uma lista de strings com cada campus presente
+ */
+function obterCampi(campi) {
+    var lista = []
+
+    for (var i = 0; i < campi.length; i++) {
+        lista.push(campi[i].campus);
+    }
+
+    return lista;
+}
+
+
 /**
  * Define uma lista de campus, apaga todos os alunos associados com
  * cada campus dessa lista, e por final apaga o campus.
@@ -96,7 +111,7 @@ function removeCampus(index, campi, alunos) {
             }
         }
     }
-       
+
     // Remove apenas os alunos da lista de marcados
     for (var i = 0; i < alunos_marcados.length; i++) {
         index = buscaAluno(alunos_marcados[i].matricula, alunos);
@@ -109,5 +124,5 @@ function removeCampus(index, campi, alunos) {
 
 
 module.exports = {
-    buscaAluno, obterAluno, validarAluno, removeAluno, buscaCampus, validarCampus, removeCampus
+    buscaAluno, obterAluno, validarAluno, removeAluno, buscaCampus, validarCampus, obterCampi, removeCampus
 };
