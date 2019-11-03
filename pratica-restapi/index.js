@@ -15,6 +15,9 @@ var campi = [];
  * Retorna a lista de alunos do servidor
  */
 app.get("/api/alunos", (req, res) => {
+    if (Object.keys(req.query).length > 0) {
+        return res.send(helper.geraConsulta(req.query, alunos));
+    }
     return res.send(alunos);
 });
 
@@ -32,7 +35,7 @@ app.get("/api/alunos/:matricula", (req, res) => {
     if (index < 0) {
         return res.status(404).send("Não existe aluno cadastrado com este número de matrícula.");
     }
-    // Existindo, retorna o nome
+    // Existindo, retorna o nome (ou o aluno, se quiser. Apenas retirando a refererência ao atributo.)
     return res.send(alunos[index].nome);
 });
 

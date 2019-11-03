@@ -14,6 +14,7 @@ function buscaAluno(matr, alunos) {
     return -1;
 }
 
+
 /**
  * Retorna o nome do aluno com a dada matrícula se esta existir,
  * caso contrário, retorna nulo.
@@ -27,6 +28,7 @@ function obterAluno(matr, alunos) {
     }
     return alunos[index].nome;
 }
+
 
 /**
  * Valida o aluno fornecido pelos campos adequados. 
@@ -47,9 +49,13 @@ function validarAluno(aluno) {
 }
 
 
+/**
+ * Remove aluno da lista dado seu índice
+ */
 function removeAluno(index, alunos) {
     return alunos.splice(index, 1);
 }
+
 
 /**
  * Checa se o campus com código fornecido existe. Caso positivo,
@@ -122,9 +128,11 @@ function removeCampus(index, campi, alunos) {
     return campi.splice(index, 1);
 }
 
+
 /**
  * Verifica se um determinado aluno contém seu campus
- * cadastrado no sistema
+ * cadastrado no sistema. Retorna verdadeiro para o caso
+ * de campus não cadastrado.
  */
 function campusAusente(campus, campi) {
     let listaCampi = obterCampi(campi); 
@@ -141,6 +149,59 @@ function campusAusente(campus, campi) {
     return campusNotFound
 }
 
+
+/**
+ * Verifica se uma determinada data está dentro de um período de duas 
+ * outras datas. Assume que o formato de entrada de data está definido
+ * como a string "YYYY-MM-DD"
+ */
+function entrePeriodo(data, inicio, fim) {
+    let data_atual = new Date(data);
+    let data_inicio = new Date(inicio);
+    let data_fim = new Date(fim);
+
+    if ((data_atual >= data_inicio) && (data_atual <= data_fim)) {
+        return true;
+    }
+    return false;
+}
+
+
+/**
+ * Retorna um array com a lista de alunos de acordo com a consulta fornecida
+ */
+function geraConsulta(consulta, alunos) {
+    let listaConsulta = []
+
+    if (consulta.campus) {
+        for (var i = 0; i < alunos.length; i++) {
+            if (alunos[i].campus === consulta.campus) {
+                listaConsulta.push(alunos[i]);
+            }
+        }
+        return listaConsulta;
+    }
+    if (consulta.curso) {
+        for (var i = 0; i < alunos.length; i++) {
+            if (alunos[i].curso === consulta.curso) {
+                listaConsulta.push(alunos[i]);
+            }
+        }
+        return listaConsulta;
+    }
+    if (consulta.datainicio) {
+        for (var i = 0; i < alunos.length; i++) {
+            if (entrePeriodo(alunos[i].datanasc, consulta.datainicio, consulta.datafim)) {
+                listaConsulta.push(alunos[i]);
+            }
+        }
+        return listaConsulta;
+    }
+}
+
+
 module.exports = {
-    buscaAluno, obterAluno, validarAluno, removeAluno, buscaCampus, validarCampus, obterCampi, removeCampus, campusAusente
+    buscaAluno, obterAluno, validarAluno, removeAluno, 
+    buscaCampus, validarCampus, obterCampi, removeCampus, campusAusente,
+    entrePeriodo, geraConsulta
 };
