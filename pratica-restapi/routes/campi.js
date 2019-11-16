@@ -3,15 +3,15 @@ var router = express.Router();
 const controller = require("../controllers/campi");
 
 
-router.get("/api/campi", controller.listaCampi);
+router.get("/", controller.listaCampi);
 
-router.get("/api/campi/:codigo", controller.obterCampus);
+router.get("/:codigo", controller.obterCampus);
 
-router.post("/api/campi", controller.inserirCampus);
+router.post("/", controller.inserirCampus);
 
-router.put("/api/campi/:codigo", controller.atualizarCampus);
+router.put("/:codigo", controller.atualizarCampus);
 
-router.delete("/api/campi/:codigo", controller.removerCampus);
+router.delete("/:codigo", controller.removerCampus);
 
 
 module.exports = router;

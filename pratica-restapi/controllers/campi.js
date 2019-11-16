@@ -31,7 +31,7 @@ const inserirCampus = (req, res) => {
 
     campi.push(campus);
 
-    return res.send(campus);
+    return res.status(201).send(campus);
 }
 
 const atualizarCampus = (req, res) => {

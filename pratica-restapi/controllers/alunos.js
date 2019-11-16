@@ -47,7 +47,7 @@ const inserirAluno = (req, res) => {
     
     // Caso contrário, insere na lista
     alunos.push(aluno);
-    return res.send(aluno);
+    return res.status(201).send(aluno);
 }
 
 

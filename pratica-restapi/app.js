@@ -6,12 +6,13 @@ var cookieParser = require('cookie-parser');
 
 // Importar rotas
 var indexRouter = require('./routes/index');
-//var usersRouter = require('./routes/users');
+var alunosRouter = require('./routes/alunos');
+var campiRouter = require('./routes/campi');
 
-
+// Definir aplicação express
 var app = express();
 
-// Views setup
+// Setup das views
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -21,9 +22,10 @@ app.use(express.urlencoded( {extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+// Definição das rotas
 app.use('/', indexRouter);
-//app.use('/users', usersRouter);
+app.use('/api/alunos', alunosRouter);
+app.use('/api/campi', campiRouter);
 
 
 // Captura erro 404 e delega-o ao gerenciador de erro
