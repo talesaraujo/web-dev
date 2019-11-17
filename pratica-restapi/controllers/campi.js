@@ -1,76 +1,91 @@
-// Importar model
+const Campus = require("../models/campus");
 
-const listaCampi = (req, res) => {
-    res.send(campi);
+
+const listaCampi = async (req, res) => {
+    campi = await Campus.find({});
+
+    return res.json(campi);
 }
 
-const obterCampus = (req, res) => {
+
+const obterCampus = async (req, res) => {
     const cod = req.params.codigo;
-    const index = helper.buscaCampus(cod, campi);
 
-    if (index < 0) {
-        return res.status(404).send("Erro: Campus não encontrado!");
+    try {
+        campus = await Campus.findOne({"codigo": cod});
+
+        if (!campus) {
+            return res.status(404).send("Erro: Campus não encontrado");
+        }
+        return res.status(200).send(campus);
     }
-    return res.send(campi[index]);
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor");
+    }
 }
 
-const inserirCampus = (req, res) => {
-    campus = req.body;
 
-    const { error } = helper.validarCampus(campus);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
+const inserirCampus = async (req, res) => {
+    const cod = req.body.codigo;
+
+    try {
+        if (await Campus.findOne({"codigo": cod})) {
+            return res.status(409).send("Erro: Campus já existe!");
+        }
+        const campus = await Campus.create(req.body);
+        
+        return res.status(201).send(campus);
     }
-
-    const index = helper.buscaCampus(campus.codigo, campi);
-
-    // Se o curso já existir, retorna 409 (conflict)
-    if (index >= 0) {
-        return res.status(409).send("Erro: Campus já existente!");
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor");
     }
-
-    campi.push(campus);
-
-    return res.status(201).send(campus);
 }
 
-const atualizarCampus = (req, res) => {
-    campus = req.body;
 
-    // Valida o novo campus de acordo com os requisitos
-    const { error } = helper.validarCampus(campus);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-    }
-
-    const cod = req.params.codigo
-    const index = helper.buscaCampus(cod, campi);
-
-    // Caso o campus fornecido não exista
-    if (index < 0) {
-        return res.status(404).send("Erro: Campus não encontrado!");
-    }
-
-    // Atualiza o campus e retorna este novo campus com dados atualizados.
-    ['campus', 'cursos']
-    .forEach((attr) => {
-        campi[index][attr] = campus[attr];
-    });
-
-    return res.send(campi[index]);
-}
-
-const removerCampus = (req, res) => {
+const atualizarCampus = async (req, res) => {
     const cod = req.params.codigo;
-    const index = helper.buscaCampus(cod, campi);
 
-    // Caso o campus não exista
-    if (index < 0) {
-        return res.status(404).send("Erro: Campus não encontrado!");
+    try {
+        const filter = {"codigo": cod};
+        const updated = {
+            "codigo": req.body.codigo,
+            "nome": req.body.nome,
+            "cursos": req.body.cursos
+        }
+
+        novoCampus = await Campus.findOneAndUpdate(filter, updated, {new: true});
+
+        if (!novoCampus) {
+            return res.status(404).send("Erro: Campus não encontrado");
+        }
+        return res.status(200).send(novoCampus);
     }
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor"); 
+    }
+}
 
-    // Se o campus existir, remove todos os alunos dos cursos e remove o campus.
-    return res.send(helper.removeCampus(index, campi, alunos));
+
+const removerCampus = async (req, res) => {
+    const cod = req.params.codigo;
+
+    try {
+        const filter = {"codigo": cod};
+        
+        campusRemovido = await Campus.findOneAndDelete(filter);
+
+        if (!campusRemovido) {
+            return res.status(404).send("Erro: Campus não encontrado");
+        }
+        return res.status(200).send(campusRemovido);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor"); 
+    }
 }
 
 
