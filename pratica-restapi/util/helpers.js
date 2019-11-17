@@ -1,55 +1,39 @@
+const Joi = require("joi");
+
 
 /**
- * Verifica se uma determinada data está dentro de um período de duas 
- * outras datas. Assume que o formato de entrada de data está definido
- * como a string "YYYY-MM-DD"
+ * Valida o aluno fornecido pelos campos adequados. 
  */
-function entrePeriodo(data, inicio, fim) {
-    let data_atual = new Date(data);
-    let data_inicio = new Date(inicio);
-    let data_fim = new Date(fim);
-
-    if ((data_atual >= data_inicio) && (data_atual <= data_fim)) {
-        return true;
-    }
-    return false;
+function validarAluno(aluno) {
+    const schema = {
+        matricula: Joi.string().required(),
+        nome: Joi.string().min(3).required(),
+        datanasc: Joi.string().min(10).max(10),
+        email: Joi.string(),
+        ddd: Joi.number().integer(),
+        telefone: Joi.string().min(10).max(10),
+        operadora: Joi.string(),
+        campus: Joi.string().required(),
+        curso: Joi.string().required()
+    };
+    return Joi.validate(aluno, schema);
 }
+
 
 /**
- * Retorna um array com a lista de alunos de acordo com a consulta fornecida
+ * Valida o cacampusmpus fornecido pelos campos adequados. 
  */
-function geraConsulta(consulta, alunos) {
-    let listaConsulta = []
-
-    if (consulta.campus) {
-        for (var i = 0; i < alunos.length; i++) {
-            if (alunos[i].campus === consulta.campus) {
-                listaConsulta.push(alunos[i]);
-            }
-        }
-        return listaConsulta;
-    }
-    if (consulta.curso) {
-        for (var i = 0; i < alunos.length; i++) {
-            if (alunos[i].curso === consulta.curso) {
-                listaConsulta.push(alunos[i]);
-            }
-        }
-        return listaConsulta;
-    }
-    if (consulta.datainicio) {
-        for (var i = 0; i < alunos.length; i++) {
-            if (entrePeriodo(alunos[i].datanasc, consulta.datainicio, consulta.datafim)) {
-                listaConsulta.push(alunos[i]);
-            }
-        }
-        return listaConsulta;
-    }
+function validarCampus(campus) {
+    const schema = {
+        codigo: Joi.string().required(),
+        nome: Joi.string().required(),
+        cursos: Joi.array().min(1).required()
+    };
+    return Joi.validate(campus, schema);
 }
+
 
 
 module.exports = {
-    buscaAluno, obterAluno, validarAluno, removeAluno, 
-    buscaCampus, validarCampus, obterCampi, removeCampus, campusAusente,
-    entrePeriodo, geraConsulta
+    validarAluno, validarCampus
 };

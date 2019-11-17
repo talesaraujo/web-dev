@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.set('useFindAndModify', false);
-
+mongoose.connect('mongodb://localhost:27017',
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+    }
+);
 
 const Schema = mongoose.Schema;
 

@@ -1,4 +1,5 @@
 const Campus = require("../models/campus");
+const helper = require("../util/helpers");
 
 
 const listaCampi = async (req, res) => {
@@ -29,6 +30,12 @@ const obterCampus = async (req, res) => {
 const inserirCampus = async (req, res) => {
     const cod = req.body.codigo;
 
+    const { error } = helper.validarCampus(req.body);
+
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
     try {
         if (await Campus.findOne({"codigo": cod})) {
             return res.status(409).send("Erro: Campus já existe!");
@@ -46,6 +53,12 @@ const inserirCampus = async (req, res) => {
 
 const atualizarCampus = async (req, res) => {
     const cod = req.params.codigo;
+
+    const { error } = helper.validarCampus(req.body);
+
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
 
     try {
         const filter = {"codigo": cod};

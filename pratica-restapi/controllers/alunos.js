@@ -1,4 +1,5 @@
 const Aluno = require("../models/aluno");
+const helper = require("../util/helpers");
 
 
 const listaAlunos = async (req, res) => {
@@ -29,6 +30,12 @@ const obterAluno = async (req, res) => {
 const inserirAluno = async (req, res) => {
     const matr = req.body.matricula;
 
+    const { error } = helper.validarAluno(req.body);
+
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
+
     try {
         if (await Aluno.findOne({"matricula": matr})) {
             return res.status(409).send("Erro: Aluno já existe!");
@@ -46,6 +53,12 @@ const inserirAluno = async (req, res) => {
 
 const atualizarAluno = async (req, res) => {
     const matr = req.params.matricula;
+
+    const { error } = helper.validarAluno(req.body);
+
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
 
     try {
         const filter = {"matricula": matr};

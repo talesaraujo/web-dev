@@ -1,15 +1,22 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017', { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.set('useFindAndModify', false);
-
+mongoose.connect('mongodb://localhost:27017',
+    { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+        useFindAndModify: false,
+        useCreateIndex: true
+    }
+);
 
 const Schema = mongoose.Schema;
 
 const CampusSchema = new Schema(
     {
         codigo: {
-            type: String, required: true
+            type: String, 
+            required: true,
+            unique: true
         },
         nome: String,
         cursos: Array
