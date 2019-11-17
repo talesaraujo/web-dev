@@ -1,4 +1,6 @@
 const Aluno = require("../models/aluno");
+const Campus = require("../models/campus");
+
 const helper = require("../util/helpers");
 
 
@@ -36,6 +38,19 @@ const inserirAluno = async (req, res) => {
         return res.status(400).send(error.details[0].message);
     }
 
+    listaCampi = await Campus.find({});
+    
+    const campusAluno = listaCampi.find((campus) => {
+        if (campus.nome == req.body.campus) {
+            return campus; 
+        };
+        return null;
+    });
+    
+    if (!campusAluno) {
+        return res.status(412).send("Erro: O campus informado não consta no sistema");
+    }
+
     try {
         if (await Aluno.findOne({"matricula": matr})) {
             return res.status(409).send("Erro: Aluno já existe!");
@@ -58,6 +73,19 @@ const atualizarAluno = async (req, res) => {
 
     if (error) {
         return res.status(400).send(error.details[0].message);
+    }
+
+    listaCampi = await Campus.find({});
+    
+    const campusAluno = listaCampi.find((campus) => {
+        if (campus.nome == req.body.campus) {
+            return campus; 
+        };
+        return null;
+    });
+    
+    if (!campusAluno) {
+        return res.status(412).send("Erro: O campus informado não consta no sistema");
     }
 
     try {

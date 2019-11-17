@@ -21,7 +21,7 @@ function validarAluno(aluno) {
 
 
 /**
- * Valida o cacampusmpus fornecido pelos campos adequados. 
+ * Valida o campus fornecido pelos campos adequados. 
  */
 function validarCampus(campus) {
     const schema = {
