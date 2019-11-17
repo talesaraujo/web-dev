@@ -1,100 +1,100 @@
-// Importar model
+const Aluno = require("../models/aluno");
 
-const listaAlunos = (req, res) => {
+
+const listaAlunos = async (req, res) => {
+    alunos = await Aluno.find({});
+
+    return res.json(alunos);
+}
+
+
+const obterAluno = async (req, res) => {
     const matr = req.params.matricula;
-    const index = helper.buscaAluno(matr, alunos);
 
-    // Se o aluno não existir
-    if (index < 0) {
-        return res.status(404).send("Não existe aluno cadastrado com este número de matrícula.");
+    try {
+        aluno = await Aluno.findOne({"matricula": matr});
+
+        if (!aluno) {
+            return res.status(404).send("Erro: Aluno não encontrado");
+        }
+        return res.status(200).send(aluno);
     }
-    // Existindo, retorna o nome (ou o aluno, se quiser. Apenas retirando a refererência ao atributo.)
-    return res.send(alunos[index].nome);
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor");
+    }
 }
 
 
-const obterAluno = (req, res) => {
+const inserirAluno = async (req, res) => {
+    const matr = req.body.matricula;
+
+    try {
+        if (await Aluno.findOne({"matricula": matr})) {
+            return res.status(409).send("Erro: Aluno já existe!");
+        }
+        const aluno = await Aluno.create(req.body);
+        
+        return res.status(201).send(aluno);
+    }
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor");
+    }
+};
+
+
+const atualizarAluno = async (req, res) => {
     const matr = req.params.matricula;
-    const index = helper.buscaAluno(matr, alunos);
 
-    // Se o aluno não existir
-    if (index < 0) {
-        return res.status(404).send("Não existe aluno cadastrado com este número de matrícula.");
+    try {
+        const filter = {"matricula": matr};
+        const updated = {
+            "matricula": req.body.matricula,
+            "nome": req.body.nome,
+            "datanasc": req.body.datanasc,
+            "email": req.body.email,
+            "ddd": req.body.ddd,
+            "telefone": req.body.telefone,
+            "operadora": req.body.operadora,
+            "campus": req.body.campus,
+            "curso": req.body.curso
+        }
+
+        novoAluno = await Aluno.findOneAndUpdate(filter, updated, {new: true});
+
+        if (!novoAluno) {
+            return res.status(404).send("Erro: Aluno não encontrado");
+        }
+        return res.status(200).send(novoAluno);
     }
-    // Existindo, retorna o nome (ou o aluno, se quiser. Apenas retirando a refererência ao atributo.)
-    return res.send(alunos[index].nome);
-}
-
-
-const inserirAluno = (req, res) => {
-    const aluno = req.body;
-
-    // Aplica validação pelos campos do aluno necessários
-    const { error } = helper.validarAluno(aluno);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor"); 
     }
-
-    // Se o aluno já existir
-    if (helper.buscaAluno(aluno.matricula, alunos) >= 0) {
-        return res.status(409).send("Erro: Já existe um aluno com a matrícula fornecida!");
-    }
-
-    // Se o campus do aluno não estiver na lista
-    if (helper.campusAusente(aluno.campus, campi)) {
-        return res.status(412).send("Erro: O campus informado não consta no sistema");
-    }
-    
-    // Caso contrário, insere na lista
-    alunos.push(aluno);
-    return res.status(201).send(aluno);
-}
+};
 
 
-const atualizarAluno = (req, res) => {
-    const aluno = req.body;
-
-    // Valida corpo da requisição
-    const { error } = helper.validarAluno(aluno);
-    if (error) {
-        return res.status(400).send(error.details[0].message);
-    }
-
+const removerAluno = async (req, res) => {
     const matr = req.params.matricula;
-    const indice = helper.buscaAluno(matr, alunos);
 
-    // Se o aluno não existir
-    if (indice < 0) {
-        return res.status(404).send("Erro: Aluno não encontrado!");
+    try {
+        const filter = {"matricula": matr};
+        
+        alunoRemovido = await Aluno.findOneAndDelete(filter);
+
+        if (!alunoRemovido) {
+            return res.status(404).send("Erro: Aluno não encontrado");
+        }
+        return res.status(200).send(alunoRemovido);
     }
-
-    // Se o campus do aluno não estiver na lista
-    if (helper.campusAusente(aluno.campus, campi)) {
-        return res.status(412).send("Erro: O campus informado não consta no sistema");
+    catch (err) {
+        console.log(err);
+        return res.status(500).send("Erro interno do servidor"); 
     }
-
-    // Atualiza os dados do aluno e o retorna com dados atualizados.
-    ['nome', 'datanasc', 'email', 'ddd', 'telefone', 'operadora', 'campus', 'curso']
-    .forEach((attr) => {
-        alunos[indice][attr] = aluno[attr];
-    });
-
-    return res.send(alunos[indice]);
 }
 
 
-const removerAluno = (req, res) => {
-    const matr = req.params.matricula;
-    const index = helper.buscaAluno(matr, alunos);
-
-    // Caso o aluno não exista
-    if (index < 0) {
-        return res.status(404).send("Erro: Aluno não encontrado!");
-    }
-
-    // Exclui da lista e o retorna
-    return res.send(helper.removeAluno(index, alunos));
-}
 
 module.exports = {
     listaAlunos, obterAluno, inserirAluno, atualizarAluno, removerAluno
