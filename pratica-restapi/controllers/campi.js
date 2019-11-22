@@ -1,10 +1,11 @@
 const Campus = require("../models/campus");
+const Aluno = require("../models/aluno");
 
 const helper = require("../util/helpers");
 
 
 const listaCampi = async (req, res) => {
-    campi = await Campus.find({});
+    const campi = await Campus.find({});
 
     return res.json(campi);
 }
@@ -87,9 +88,15 @@ const removerCampus = async (req, res) => {
     const cod = req.params.codigo;
 
     try {
-        const filter = {"codigo": cod};
-        
-        campusRemovido = await Campus.findOneAndDelete(filter);
+        // Obter a referência ao campus
+        const campus = await Campus.findOne({"codigo": cod});
+
+        if (campus) {
+            // Se o campus informado existir, remove todos os alunos associados com aquele campus
+            await Aluno.deleteMany({ "campus": campus.nome });
+        }
+
+        campusRemovido = await Campus.findOneAndDelete({ "codigo": cod });
 
         if (!campusRemovido) {
             return res.status(404).send("Erro: Campus não encontrado");
