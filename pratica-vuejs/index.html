@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <title>Controle de Alunos</title>
+</head>
+<body>
+    <div class="container" id="about-modal">
+        <!-- Button trigger modal -->
+        <button id="about-button" type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal">?</button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Autor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Tales Araujo</h6>
+                    
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <img src="img/char_talim.png" class="rounded-circle" alt="char_talim" width="100" height="100">
+                        </div>
+                        <div class="col-sm-8" id="about-description">
+                            <p>
+                                Hi there! I'm Tales Araujo, a Computer-Engineering undergraduate student, currently holding a bachelor degree at 
+                                Federal University of Ceara (UFC), and enthusiast of topics evolving data, Machine Learning and Deep Learning as well.
+                                I am passionate about discovering things throughout the world, gathering information for what I think that is relevant
+                                in some way in order to bring meaningful outcomes to the world around me.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <a href="https://github.com/talesaraujo">My GitHub profile</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 id="app-name">Sistema de Controle de Alunos</h2>
+
+    <div id="app-section">
+        <div class="container" id="formulario">
+            <h5 id="form-name" class="container">Formulário de alunos</h5>
+            <form id="formulario-alunos" method="POST">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="entradaMatricula">Matrícula</label>
+                        <input type="number" class="form-control" id="inputMatricula" placeholder="Adicione a matrícula do aluno" name="matricula" v-model="matricula" required>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="entradaNome">Nome</label>
+                        <input type="text" class="form-control" id="inputNome" placeholder="Adicione o nome do aluno" name="nome" v-model="nome" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="entradaDataNasc">Data de Nascimento</label>
+                        <input type="date" class="form-control" id="inputDataNasc" placeholder="dd/mm/aaaa" name="datanasc" v-model="datanasc" required>
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="entradaEmail">Email</label>
+                        <input type="email" class="form-control" id="inputEmail" placeholder="Adicione o email do aluno" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" name="email" v-model="email" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="entradaDDD">DDD</label>
+                        <input type="number" class="form-control" id="inputDDD" placeholder="DDD" name="ddd" v-model="ddd" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="entradaTel">Telefone</label>
+                        <input type="tel" class="form-control" id="inputTel" placeholder="XXXXX-XXXX" pattern="[0-9]{5}-[0-9]{4}" name="telefone" v-model="telefone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="selOp">Operadora</label>
+                        <select class="form-control" id="selOp" name='operadora' v-model="operadora">
+                            <option name='oi' value="oi">Oi</option>
+                            <option name='tim' value="tim">TIM</option>
+                            <option name='vivo' value="vivo">Vivo</option>
+                            <option name='claro' value="claro">Claro</option>
+                            <option name='outra' value="outra">Outra</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for=selCampus>Campus</label>
+                        <select class="form-control" id="selCampus" name="campus" v-on:change="createCourseList" v-model="campus">
+                            <option disabled>Selecione o campus</option>
+                            <option v-for="campus in campi">{{ campus.nome }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for=selCurso>Curso</label>
+                        <select class="form-control" name="curso" id="selCurso" v-model="curso">
+                            <option disabled>Selecione o curso</option>
+                                <option v-for="curso in cursos">{{ curso }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row" id="buttons">
+                    <button type="reset" class="btn btn-light" id="clear">Limpar</button>
+                    <button type="submit" class="btn btn-info" id="submit-data" v-on:click="inserirAluno">Inserir</button>
+                </div>
+            </form>
+        </div>
+
+        <br><br><br>
+
+        <div id="lista-dinamica" class="container">
+            <h5>Relação de Alunos</h5>
+
+            <table class="table table-bordered" id="tabela-alunos">
+                <thead class="thead-light">
+                    <tr>
+                        <th scope="col" id="matr-col">Matrícula</th>
+                        <th scope="col" id="nome-col">Nome</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-lista">
+                    <div v-if="alunos.length > 0">
+                        <tr v-for="aluno in alunos">
+                            <td>{{ aluno.matricula }}</td>
+                            <td>{{ aluno.nome }}</td>
+                            <td><button type="button" class="btn btn-danger" v-on:click="excluirAluno(aluno)">Remover</button></td>
+                        </tr>
+                    </div>   
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    
+    <script src="js/vue.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
