@@ -1,6 +1,6 @@
 var app = new Vue({
     
-    el: "#formulario",
+    el: "#app-section",
 
     data: {
         matricula: null,
@@ -11,109 +11,77 @@ var app = new Vue({
         telefone: null,
         operadora: null,
         campus: null,
-        curso: null
+        curso: null,
+        baseURL: "http://localhost:3000",
+        campi: [],
+        alunos: [],
+        cursos: []
+    },
+
+    async created() {
+        try {
+            const respCampi = await axios.get(`${this.baseURL}/api/campi`);
+            this.campi = respCampi.data;
+
+            const respAlunos = await axios.get(`${this.baseURL}/api/alunos`);
+            this.alunos = respAlunos.data;
+
+            sortByName(this.campi, 0, this.campi.length-1);
+            sortByName(this.alunos, 0, this.alunos.length-1);
+        }
+        catch (error) {
+            console.log(error);
+        }
+        
+    },
+
+    methods: {
+
+        createCourseList() {
+            var index;
+
+            for (var i = 0; i < this.campi.length; i++) {
+                if (this.campus == this.campi[i].nome) {
+                    index = i;
+                }
+            }
+            this.cursos = this.campi[index].cursos.sort();
+        },
+
+        async inserirAluno() {
+            let novoAluno = {
+                "matricula": this.matricula,
+                "nome": this.nome,
+                "datanasc": this.datanasc,
+                "email": this.email,
+                "ddd": this.ddd,
+                "telefone": this.telefone,
+                "operadora": this.operadora,
+                "campus": this.campus,
+                "curso": this.curso
+            }
+            try {
+                const response = await axios.post(`${this.baseURL}/api/alunos`, novoAluno);
+                console.log(response);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        },
+
+        async excluirAluno(aluno) {
+            try {
+                await axios.delete(`${this.baseURL}/api/alunos/${aluno.matricula}`);
+
+                window.location.replace('index.html')
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
     }
 });
 
-
-
-var CAMPI = {
-    "Benfica": ['Biblioteconomia',
-                'Ciências Sociais',
-                'História',
-                'Letras - Alemão',
-                'Letras - Espanhol',
-                'Letras - Francês',
-                'Letras - Inglês',
-                'Letras - Italiano',
-                'Letras - Português',
-                'Psicologia',
-                'Direito',
-                'Pedagogia',
-                'Arquitetura e Urbanismo',
-                'Economia',
-                'Administração',
-                'Ciências Atuariais',
-                'Ciências Contábeis',
-                'Ciências Econômicas',
-                'Finanças',
-                'Secretariado Executivo'],
-
-    "Pici": ['Biotecnologia',
-             'Ciência da Computação',
-             'Ciências Biológicas',
-             'Computação',
-             'Estatística',
-             'Física',
-             'Geografia',
-             'Geologia',
-             'Matemática',
-             'Matemática Industrial',
-             'Química',
-             'Química Industrial',
-             'Agronomia',
-             'Economia Ecológica',
-             'Engenharia de Alimentos',
-             'Engenharia de Pesca',
-             'Gestão de Políticas Públicas',
-             'Zootecnia',
-             'Engenharia Civil',
-             'Engenharia de Computação',
-             'Engenharia Elétrica',
-             'Engenharia de Energias e Meio Ambiente',
-             'Engenharia Mecânica',
-             'Engenharia Metalúrgica',
-             'Engenharia de Produção Mecânica',
-             'Engenharia de Telecomunicações',
-             'Engenharia de Teleinformática',
-             'Engenharia Química',
-             'Cinema e Audiovisual',
-             'Comunicação Social - Jornalismo',
-             'Comunicação Social - Publicidade',
-             'Dança',
-             'Design - Moda',
-             'Filosofia',
-             'Gastronomia',
-             'Música',
-             'Educação Física',
-             'Sistemas e Mídias Digitais'],
-
-    "Porangabussu": ['Enfermagem',
-                     'Farmácia', 
-                     'Odontologia',
-                     'Fisioterapia',
-                     'Medicina']
-}
-
-
-/*
-    Helper functions to render options inside selection forms
-*/
-function populate(select1, select2) {
-    var s1 = document.getElementById(select1),
-        s2 = document.getElementById(select2);
-
-    s2.innerHTML = "";
-
-    if (s1.value == "Benfica") {
-        var cursos = CAMPI.Benfica;
-    }
-    else if (s1.value == "Pici") {
-        var cursos = CAMPI.Pici;
-    }
-    else if (s1.value == "Porangabussu") {
-        var cursos = CAMPI.Porangabussu;
-    }
-    else {
-        var cursos = ["Por favor selecione o campus"];
-    }
-
-    for (var i = 0; i < cursos.length; i++) {
-        var newOption = document.createElement("option");
-        newOption.innerHTML = cursos[i];
-        s2.options.add(newOption);
-    }
-}
 
 /*
     Sorting functions (sort by name key)
@@ -171,68 +139,3 @@ function merge(A, p, q, r) {
 		}
 	}
 }
-
-var alunos = [];
-var form = document.getElementById('formulario-alunos');
-
-function displayList() {
-    templateRow = ``;
-
-    if (alunos.length > 0) {
-        for (var i = 0; i < alunos.length; i++) {
-            templateRow += `<tr>
-                            <td>${alunos[i].matricula}</td>
-                            <td>${alunos[i].nome}</td>
-                            <td><button type="button" class="btn btn-danger" onclick="remove(${alunos[i].matricula})">Remover</button></td>
-                            </tr>\n`
-
-            document.getElementById("corpo-lista").innerHTML = templateRow;
-        }
-    }
-    else {
-        //Display nothing
-        document.getElementById("corpo-lista").innerHTML = `<tr></tr>`
-    }
-}
-
-
-form.onsubmit = function(event) {
-    event.preventDefault();
-
-    alunos.push({
-        'matricula': form.matricula.value,
-        'nome': form.nome.value,
-        'datanasc': form.datanasc.value,
-        'email': form.email.value,
-        'ddd': form.ddd.value,
-        'telefone': form.telefone.value,
-        'operadora': form.operadora.value,
-        'campus': form.campus.value
-        //'curso': form.curso.value
-    });
-
-    sortByName(alunos, 0, alunos.length - 1);
-
-    displayList();
-}
-
-
-function remove(num_matricula) {
-    // Delete register from array
-    for (var i = 0; i < alunos.length; i++) {
-        if (alunos[i].matricula == num_matricula) { 
-            delete alunos[i];
-        }
-    }
-    // Remove empty spaces on array
-    alunos = alunos.filter(function(element) {
-        return element != null;
-    });
-    //Display updated list
-    displayList();
-}
-
-
-
-
-    
